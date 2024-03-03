@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import os
 
 # Initialize Pygame
 pygame.init()
@@ -13,13 +14,14 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Space Invaders Screen")
 
 # Define colors
-player_color = (255, 0, 0)
-projectile_color = (0, 255, 0)
-enemy_color = (0, 0, 255)
 star_color = (255, 255, 255)
 
 # Player settings
 player_size = 50
+player_image_path = "player.png"
+player_image = pygame.image.load(os.path.join(os.path.dirname(__file__), player_image_path))
+player_image = pygame.transform.scale(player_image, (player_size, player_size))
+
 player_x = (width - player_size) // 2
 player_y = height - player_size - 20
 move_left = False
@@ -33,6 +35,9 @@ level = 1
 
 # Enemy settings
 enemy_size = 30
+enemy_image_path = "enemy.png"
+enemy_image = pygame.image.load(os.path.join(os.path.dirname(__file__), enemy_image_path))
+enemy_image = pygame.transform.scale(enemy_image, (enemy_size, enemy_size))
 enemy_spacing = 40
 enemies = []
 total_enemy_width = 10 * (enemy_size + enemy_spacing) - enemy_spacing
@@ -40,7 +45,7 @@ start_x = (width - total_enemy_width) // 2
 enemy_direction = 1
 
 # Enemy speed setting
-enemy_speed = 3
+enemy_speed = 2.5
 
 # Function to spawn enemies
 def spawn_enemies():
@@ -130,7 +135,7 @@ while running:
             elif event.key == pygame.K_d:
                 move_right = True
             elif event.key == pygame.K_RETURN:
-                projectile_x = player_x + (player_size // 2) - 2
+                projectile_x = player_x + (player_size // 2) - 5
                 projectiles.append([projectile_x, player_y])
 
         elif event.type == pygame.KEYUP:
@@ -166,7 +171,7 @@ while running:
     # Check for collisions between enemies and projectiles
     for enemy in enemies:
         for projectile in projectiles:
-            if pygame.Rect(projectile[0], projectile[1], 5, 10).colliderect(enemy):
+            if pygame.Rect(projectile[0], projectile[1], 10, 20).colliderect(enemy):
                 projectiles.remove(projectile)
                 enemies.remove(enemy)
                 score += 1
@@ -201,14 +206,18 @@ while running:
 
     # Draw enemies
     for enemy in enemies:
-        pygame.draw.rect(screen, enemy_color, enemy)
+        # Use blit to draw the enemy image at the enemy's position
+        screen.blit(enemy_image, enemy.topleft)
 
     # Draw projectiles
     for projectile in projectiles:
-        pygame.draw.rect(screen, projectile_color, (projectile[0], projectile[1], 5, 10))
+        # Use blit to draw the projectile image at the projectile's position
+        projectile_image_path = "projectile.gif"
+        projectile_image = pygame.image.load(os.path.join(os.path.dirname(__file__), projectile_image_path))
+        screen.blit(projectile_image, (projectile[0], projectile[1]))
 
     # Draw player
-    pygame.draw.rect(screen, player_color, (player_x, player_y, player_size, player_size))
+    screen.blit(player_image, (player_x, player_y))
 
     # Draw score and level on the screen
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
@@ -225,7 +234,7 @@ while running:
     # Respawn enemies if all are killed
     if not enemies:
         level += 1
-        enemy_speed += 0.2
+        enemy_speed += 0.25
         spawn_enemies()
 
     # Update the display
