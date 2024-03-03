@@ -2,28 +2,36 @@ import pygame
 import random
 import sys
 
+# Initialize Pygame
 pygame.init()
 
+# Screen dimensions
 width, height = 800, 600
+
+# Create the game window
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Space Invaders Screen")
 
+# Define colors
 player_color = (255, 0, 0)
 projectile_color = (0, 255, 0)
 enemy_color = (0, 0, 255)
 star_color = (255, 255, 255)
 
-
+# Player settings
 player_size = 50
 player_x = (width - player_size) // 2
 player_y = height - player_size - 20
 move_left = False
 move_right = False
 
+# Projectiles list
 projectiles = []
 
+# Game level
 level = 1
 
+# Enemy settings
 enemy_size = 30
 enemy_spacing = 40
 enemies = []
@@ -31,6 +39,7 @@ total_enemy_width = 10 * (enemy_size + enemy_spacing) - enemy_spacing
 start_x = (width - total_enemy_width) // 2
 enemy_direction = 1
 
+# Function to spawn enemies
 def spawn_enemies():
     for row in range(3):
         for i in range(10):
@@ -38,24 +47,31 @@ def spawn_enemies():
             enemy_y = 60 + row * (enemy_size + enemy_spacing)
             enemies.append(pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size))
 
+# Initialize enemies
 spawn_enemies()
 
+# Pygame clock and frames per second
 clock = pygame.time.Clock()
 fps = 60
+
+# Player and projectile speeds
 player_speed = 10.0
 projectile_speed = 20.0
-enemy_speed = 5.0
 
-# Score and level initialization
+# Enemy speed
+enemy_speed = 2.5
+
+# Score and font settings
 score = 0
 font = pygame.font.Font(None, 36)
 
-# Main menu settings
+# Main menu font settings
 menu_font = pygame.font.Font(None, 48)
 menu_text_color = (255, 255, 255)
 menu_options = ["Start Game", "Exit"]
 selected_option = None
 
+# Function to draw the main menu
 def draw_main_menu():
     screen.fill((0, 0, 30))
     for i, option in enumerate(menu_options):
@@ -72,7 +88,6 @@ while in_main_menu:
             pygame.quit()
             sys.exit()
 
-    # Check for mouse clicks
     mouse_x, mouse_y = pygame.mouse.get_pos()
     mouse_clicked = pygame.mouse.get_pressed()[0]
 
@@ -109,7 +124,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        # Pressing keys
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 move_left = True
@@ -119,19 +133,19 @@ while running:
                 projectile_x = player_x + (player_size // 2) - 2
                 projectiles.append([projectile_x, player_y])
 
-        # Letting go of keys
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 move_left = False
             elif event.key == pygame.K_d:
                 move_right = False
 
+    # Move the player left or right
     if move_left and player_x > 0:
         player_x -= player_speed
     if move_right and player_x < width - player_size:
         player_x += player_speed
 
-    # Constant y reduction for projectiles
+    # Move projectiles upwards
     for projectile in projectiles:
         projectile[1] -= projectile_speed
 
@@ -156,12 +170,12 @@ while running:
                 projectiles.remove(projectile)
                 enemies.remove(enemy)
                 score += 1
-                
+
     # Check for collisions between player and enemies
     for enemy in enemies:
         if pygame.Rect(player_x, player_y, player_size, player_size).colliderect(enemy):
             game_over_screen(score)
-            pygame.time.delay(3000)  # Pause for 3 seconds to show the game over screen
+            pygame.time.delay(3000)
             running = False
             break
 
@@ -173,10 +187,10 @@ while running:
             running = False
             break
 
-    # Remove projectiles that go off screen by creating a new list
+    # Remove projectiles that go off screen
     projectiles = [projectile for projectile in projectiles if projectile[1] > 0]
 
-    # Color the screen dark blue
+    # Draw the game elements
     screen.fill((0, 0, 30))
 
     # Draw stars
@@ -214,6 +228,8 @@ while running:
         enemy_speed += 0.25
         spawn_enemies()
 
+    # Update the display
     pygame.display.flip()
 
+# Quit the game
 pygame.quit()
