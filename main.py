@@ -9,6 +9,7 @@ player_size = 50
 player_color = (255, 0, 0)
 projectile_color = (0, 255, 0)
 enemy_color = (0, 0, 255)
+level = 0
 
 player_x = (width - player_size) // 2
 player_y = height - player_size - 20
@@ -88,10 +89,12 @@ while running:
         for enemy in enemies:
             enemy.y += 10
 
-    # Remove enemies that collide with projectiles
-    enemies = [enemy for enemy in enemies if not any(
-        pygame.Rect(projectile[0], projectile[1], 5, 10).colliderect(enemy) for projectile in projectiles
-    )]
+    # Check for collisions between enemies and projectiles
+    for enemy in enemies:
+        for projectile in projectiles:
+            if pygame.Rect(projectile[0], projectile[1], 5, 10).colliderect(enemy):
+                projectiles.remove(projectile)
+                enemies.remove(enemy)
 
     # Remove projectiles that go off screen by creating a new list
     projectiles = [projectile for projectile in projectiles if projectile[1] > 0]
@@ -112,6 +115,8 @@ while running:
 
     # Respawn enemies if all are killed
     if not enemies:
+        level += 1
+        enemy_speed += level//5
         spawn_enemies()
 
     pygame.display.flip()
