@@ -91,14 +91,16 @@ while in_main_menu:
     draw_main_menu()
     pygame.display.flip()
 
-# Reset variables for the game
-score = 0
-level = 1
-player_x = (width - player_size) // 2
-player_y = height - player_size - 20
-enemies = []
-spawn_enemies()
-enemy_speed = 5.0
+# Function to display the game over screen
+def game_over_screen(final_score):
+    screen.fill((0, 0, 30))
+    game_over_font = pygame.font.Font(None, 72)
+    game_over_text = game_over_font.render("Game Over", True, (255, 255, 255))
+    final_score_text = font.render(f"Your score: {final_score}", True, (255, 255, 255))
+
+    screen.blit(game_over_text, (width // 2 - game_over_text.get_width() // 2, height // 2 - 50))
+    screen.blit(final_score_text, (width // 2 - final_score_text.get_width() // 2, height // 2 + 50))
+    pygame.display.flip()
 
 # Game loop
 running = True
@@ -157,12 +159,16 @@ while running:
     # Check for collisions between player and enemies
     for enemy in enemies:
         if pygame.Rect(player_x, player_y, player_size, player_size).colliderect(enemy):
+            game_over_screen(score)
+            pygame.time.delay(3000)  # Pause for 3 seconds to show the game over screen
             running = False
+            break
 
     # Check if enemies leave the bottom part of the screen
-    # If by any chance the player manages to dodge the enemy hitbox
     for enemy in enemies.copy():
         if enemy.bottom > height:
+            game_over_screen(score)
+            pygame.time.delay(3000)
             running = False
             break
 
