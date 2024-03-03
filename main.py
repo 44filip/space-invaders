@@ -7,38 +7,36 @@ pygame.init()
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Space Invaders Screen")
-player_size = 50
+
 player_color = (255, 0, 0)
 projectile_color = (0, 255, 0)
 enemy_color = (0, 0, 255)
 star_color = (255, 255, 255)
-level = 1
 
+
+player_size = 50
 player_x = (width - player_size) // 2
 player_y = height - player_size - 20
-
-# Empty list for storing projectiles
-projectiles = []
-
 move_left = False
 move_right = False
 
-# Enemy settings
+projectiles = []
+
+level = 1
+
 enemy_size = 30
 enemy_spacing = 40
 enemies = []
-
 total_enemy_width = 10 * (enemy_size + enemy_spacing) - enemy_spacing
 start_x = (width - total_enemy_width) // 2
-
-# Create a list to store the direction of each enemy
 enemy_direction = 1
 
 def spawn_enemies():
-    for i in range(10):
-        enemy_x = start_x + i * (enemy_size + enemy_spacing)
-        enemy_y = 60
-        enemies.append(pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size))
+    for row in range(3):
+        for i in range(10):
+            enemy_x = start_x + i * (enemy_size + enemy_spacing)
+            enemy_y = 60 + row * (enemy_size + enemy_spacing)
+            enemies.append(pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size))
 
 spawn_enemies()
 
@@ -142,7 +140,10 @@ while running:
         enemy.x += enemy_speed * enemy_direction
 
     # Change direction and move down when reaching the screen edges
-    if enemies and (enemies[-1].right >= width or enemies[0].left <= 0):
+    leftmost_enemy = min(enemies, key=lambda enemy: enemy.x)
+    rightmost_enemy = max(enemies, key=lambda enemy: enemy.x + enemy_size)
+
+    if enemies and (rightmost_enemy.right >= width or leftmost_enemy.left <= 0):
         enemy_direction *= -1
         for enemy in enemies:
             enemy.y += height * 0.02
