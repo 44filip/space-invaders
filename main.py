@@ -39,9 +39,9 @@ while running:
             elif event.key == pygame.K_d:
                 move_right = False
 
-    if move_left:
+    if move_left and player_x > 0:
         player_x -= 0.25
-    if move_right:
+    if move_right and player_x < width - player_size:
         player_x += 0.25
 
     # Constant y reduction for projectiles
