@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 
@@ -9,6 +10,7 @@ player_size = 50
 player_color = (255, 0, 0)
 projectile_color = (0, 255, 0)
 enemy_color = (0, 0, 255)
+star_color = (255, 255, 255)  # White stars
 level = 1
 
 player_x = (width - player_size) // 2
@@ -119,6 +121,12 @@ while running:
 
     # Color the screen dark blue
     screen.fill((0, 0, 30))
+
+    # Draw stars
+    for _ in range(5):
+        star_x = random.randint(0, width)
+        star_y = random.randint(0, height)
+        pygame.draw.circle(screen, star_color, (star_x, star_y), 1)
 
     # Draw enemies
     for enemy in enemies:
