@@ -1,5 +1,6 @@
 import pygame
 import random
+import sys
 
 pygame.init()
 
@@ -10,7 +11,7 @@ player_size = 50
 player_color = (255, 0, 0)
 projectile_color = (0, 255, 0)
 enemy_color = (0, 0, 255)
-star_color = (255, 255, 255)  # White stars
+star_color = (255, 255, 255)
 level = 1
 
 player_x = (width - player_size) // 2
@@ -51,6 +52,55 @@ enemy_speed = 5.0
 score = 0
 font = pygame.font.Font(None, 36)
 
+# Main menu settings
+menu_font = pygame.font.Font(None, 48)
+menu_text_color = (255, 255, 255)
+menu_options = ["Start Game", "Exit"]
+selected_option = None
+
+def draw_main_menu():
+    screen.fill((0, 0, 30))
+    for i, option in enumerate(menu_options):
+        text = menu_font.render(option, True, menu_text_color)
+        text_rect = text.get_rect(center=(width // 2, height // 2 - 50 + i * 70))
+        screen.blit(text, text_rect)
+
+# Main menu loop
+in_main_menu = True
+while in_main_menu:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            in_main_menu = False
+            pygame.quit()
+            sys.exit()
+
+    # Check for mouse clicks
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    mouse_clicked = pygame.mouse.get_pressed()[0]
+
+    for i, option in enumerate(menu_options):
+        text_rect = menu_font.render(option, True, menu_text_color).get_rect(center=(width // 2, height // 2 - 50 + i * 70))
+        if text_rect.collidepoint(mouse_x, mouse_y) and mouse_clicked:
+            selected_option = i
+            if selected_option == 0:
+                in_main_menu = False
+            elif selected_option == 1:
+                pygame.quit()
+                sys.exit()
+
+    draw_main_menu()
+    pygame.display.flip()
+
+# Reset variables for the game
+score = 0
+level = 1
+player_x = (width - player_size) // 2
+player_y = height - player_size - 20
+enemies = []
+spawn_enemies()
+enemy_speed = 5.0
+
+# Game loop
 running = True
 while running:
     clock.tick(fps)
