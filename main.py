@@ -9,7 +9,7 @@ player_size = 50
 player_color = (255, 0, 0)
 projectile_color = (0, 255, 0)
 enemy_color = (0, 0, 255)
-level = 0
+level = 1
 
 player_x = (width - player_size) // 2
 player_y = height - player_size - 20
@@ -34,7 +34,7 @@ enemy_direction = 1
 def spawn_enemies():
     for i in range(10):
         enemy_x = start_x + i * (enemy_size + enemy_spacing)
-        enemy_y = 40
+        enemy_y = 60
         enemies.append(pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size))
 
 spawn_enemies()
@@ -44,6 +44,10 @@ fps = 60
 player_speed = 10.0
 projectile_speed = 20.0
 enemy_speed = 4.0
+
+# Score and level initialization
+score = 0
+font = pygame.font.Font(None, 36)
 
 running = True
 while running:
@@ -95,6 +99,7 @@ while running:
             if pygame.Rect(projectile[0], projectile[1], 5, 10).colliderect(enemy):
                 projectiles.remove(projectile)
                 enemies.remove(enemy)
+                score += 1
 
     # Remove projectiles that go off screen by creating a new list
     projectiles = [projectile for projectile in projectiles if projectile[1] > 0]
@@ -113,10 +118,22 @@ while running:
     # Draw player
     pygame.draw.rect(screen, player_color, (player_x, player_y, player_size, player_size))
 
+    # Draw score and level on the screen
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    level_text = font.render(f"Level: {level}", True, (255, 255, 255))
+
+    # Get the rect of the text surface to determine its size
+    score_rect = score_text.get_rect()
+    level_rect = level_text.get_rect()
+
+    # Set the position of the text based on the screen size and text size
+    screen.blit(score_text, (10, 10))
+    screen.blit(level_text, (width - level_rect.width - 10, 10))
+
     # Respawn enemies if all are killed
     if not enemies:
         level += 1
-        enemy_speed += level//5
+        enemy_speed += level // 5
         spawn_enemies()
 
     pygame.display.flip()
