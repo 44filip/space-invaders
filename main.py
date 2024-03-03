@@ -10,6 +10,9 @@ player_color = (255, 0, 0)
 player_x = (width - player_size) // 2
 player_y = height - player_size - 20
 
+move_left = False
+move_right = False
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -17,9 +20,19 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                player_x -= 10
+                move_left = True
             elif event.key == pygame.K_d:
-                player_x += 10
+                move_right = True
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_a:
+                move_left = False
+            elif event.key == pygame.K_d:
+                move_right = False
+
+    if move_left:
+        player_x -= 0.25
+    if move_right:
+        player_x += 0.25
 
     screen.fill((0, 0, 30))
 
