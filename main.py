@@ -1,4 +1,5 @@
 import pygame
+
 pygame.init()
 
 width, height = 800, 600
@@ -22,7 +23,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            
+        
         # Pressing keys
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
@@ -30,8 +31,9 @@ while running:
             elif event.key == pygame.K_d:
                 move_right = True
             elif event.key == pygame.K_RETURN:
-                projectiles.append([player_x + player_size // 2, player_y])
-
+                projectile_x = player_x + (player_size // 2) - 2
+                projectiles.append([projectile_x, player_y])
+                
         # Letting go of keys
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
