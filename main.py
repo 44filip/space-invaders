@@ -28,18 +28,21 @@ total_enemy_width = 10 * (enemy_size + enemy_spacing) - enemy_spacing
 start_x = (width - total_enemy_width) // 2
 
 # Create a list to store the direction of each enemy
-enemy_direction = 1  # 1 represents moving right, -1 represents moving left
+enemy_direction = 1
 
-for i in range(10):
-    enemy_x = start_x + i * (enemy_size + enemy_spacing)
-    enemy_y = 40
-    enemies.append(pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size))
+def spawn_enemies():
+    for i in range(10):
+        enemy_x = start_x + i * (enemy_size + enemy_spacing)
+        enemy_y = 40
+        enemies.append(pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size))
+
+spawn_enemies()
 
 clock = pygame.time.Clock()
-fps = 60  # Set to 60 fps
-player_speed = 10.0  # Player movement speed
-projectile_speed = 20.0 # Projectile speed
-enemy_speed = 4.0  # Enemy movement speed
+fps = 60
+player_speed = 10.0
+projectile_speed = 20.0
+enemy_speed = 4.0
 
 running = True
 while running:
@@ -106,6 +109,10 @@ while running:
 
     # Draw player
     pygame.draw.rect(screen, player_color, (player_x, player_y, player_size, player_size))
+
+    # Respawn enemies if all are killed
+    if not enemies:
+        spawn_enemies()
 
     pygame.display.flip()
 
