@@ -11,7 +11,7 @@ width, height = 800, 600
 
 # Create the game window
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Space Invaders Screen")
+pygame.display.set_caption("Scuffed Space Invaders")
 
 # Define colors
 star_color = (255, 255, 255)
