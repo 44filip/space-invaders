@@ -39,6 +39,9 @@ total_enemy_width = 10 * (enemy_size + enemy_spacing) - enemy_spacing
 start_x = (width - total_enemy_width) // 2
 enemy_direction = 1
 
+# Enemy speed setting
+enemy_speed = 3
+
 # Function to spawn enemies
 def spawn_enemies():
     for row in range(3):
@@ -57,9 +60,6 @@ fps = 60
 # Player and projectile speeds
 player_speed = 10.0
 projectile_speed = 20.0
-
-# Enemy speed
-enemy_speed = 2.5
 
 # Score and font settings
 score = 0
@@ -225,7 +225,7 @@ while running:
     # Respawn enemies if all are killed
     if not enemies:
         level += 1
-        enemy_speed += 0.25
+        enemy_speed += 0.2
         spawn_enemies()
 
     # Update the display
