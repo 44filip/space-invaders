@@ -38,10 +38,10 @@ def spawn_enemies():
 # Initialize enemies
 spawn_enemies()
 
-# Pygame clock and frames per second
+# Pygame clock setup
 clock = pygame.time.Clock()
 
-# Main menu and font settings
+# Menu font and general font settings
 menu_font = pygame.font.Font(None, 48)
 font = pygame.font.Font(None, 36)
 menu_text_color = (255, 255, 255)
@@ -167,7 +167,7 @@ while running:
     # Remove projectiles that go off screen
     projectiles = [projectile for projectile in projectiles if projectile[1] > 0]
 
-    # Draw the game elements
+    # Draw the screen
     screen.fill((0, 0, 30))
 
     # Draw stars
