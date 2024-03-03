@@ -184,7 +184,7 @@ while running:
     # Draw projectiles
     for projectile in projectiles:
         # Use blit to draw the projectile image at the projectile's position
-        projectile_image_path = "sprites/projectile.gif"
+        projectile_image_path = "sprites/projectile.png"
         projectile_image = pygame.image.load(os.path.join(os.path.dirname(__file__), projectile_image_path))
         screen.blit(projectile_image, (projectile[0], projectile[1]))
 
