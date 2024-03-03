@@ -2,50 +2,30 @@ import pygame
 import random
 import sys
 import os
+from variables import *
 
 # Initialize Pygame
 pygame.init()
-
-# Screen dimensions
-width, height = 800, 600
 
 # Create the game window
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Scuffed Space Invaders")
 
-# Define colors
-star_color = (255, 255, 255)
-
-# Player settings
-player_size = 50
-player_image_path = "player.png"
+# Player setup
+player_image_path = "sprites/player.png"
 player_image = pygame.image.load(os.path.join(os.path.dirname(__file__), player_image_path))
 player_image = pygame.transform.scale(player_image, (player_size, player_size))
-
-player_x = (width - player_size) // 2
-player_y = height - player_size - 20
 move_left = False
 move_right = False
 
 # Projectiles list
 projectiles = []
 
-# Game level
-level = 1
-
-# Enemy settings
-enemy_size = 30
-enemy_image_path = "enemy.png"
+# Enemy setup
+enemy_image_path = "sprites/enemy.png"
 enemy_image = pygame.image.load(os.path.join(os.path.dirname(__file__), enemy_image_path))
 enemy_image = pygame.transform.scale(enemy_image, (enemy_size, enemy_size))
-enemy_spacing = 40
 enemies = []
-total_enemy_width = 10 * (enemy_size + enemy_spacing) - enemy_spacing
-start_x = (width - total_enemy_width) // 2
-enemy_direction = 1
-
-# Enemy speed setting
-enemy_speed = 2.5
 
 # Function to spawn enemies
 def spawn_enemies():
@@ -60,18 +40,10 @@ spawn_enemies()
 
 # Pygame clock and frames per second
 clock = pygame.time.Clock()
-fps = 60
 
-# Player and projectile speeds
-player_speed = 10.0
-projectile_speed = 20.0
-
-# Score and font settings
-score = 0
-font = pygame.font.Font(None, 36)
-
-# Main menu font settings
+# Main menu and font settings
 menu_font = pygame.font.Font(None, 48)
+font = pygame.font.Font(None, 36)
 menu_text_color = (255, 255, 255)
 menu_options = ["Start Game", "Exit"]
 selected_option = None
@@ -212,7 +184,7 @@ while running:
     # Draw projectiles
     for projectile in projectiles:
         # Use blit to draw the projectile image at the projectile's position
-        projectile_image_path = "projectile.gif"
+        projectile_image_path = "sprites/projectile.gif"
         projectile_image = pygame.image.load(os.path.join(os.path.dirname(__file__), projectile_image_path))
         screen.blit(projectile_image, (projectile[0], projectile[1]))
 
