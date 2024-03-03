@@ -40,10 +40,10 @@ def spawn_enemies():
 spawn_enemies()
 
 clock = pygame.time.Clock()
-fps = 144
-player_speed = 5.0
-projectile_speed = 10.0
-enemy_speed = 2.0
+fps = 60
+player_speed = 10.0
+projectile_speed = 20.0
+enemy_speed = 5.0
 
 # Score and level initialization
 score = 0
@@ -91,7 +91,8 @@ while running:
     if enemies and (enemies[-1].right >= width or enemies[0].left <= 0):
         enemy_direction *= -1
         for enemy in enemies:
-            enemy.y += 10
+            enemy.y += height * 0.02
+            enemy.x += enemy_speed * enemy_direction
 
     # Check for collisions between enemies and projectiles
     for enemy in enemies:
@@ -145,7 +146,7 @@ while running:
     # Respawn enemies if all are killed
     if not enemies:
         level += 1
-        enemy_speed += level / 10
+        enemy_speed += 0.25
         spawn_enemies()
 
     pygame.display.flip()
